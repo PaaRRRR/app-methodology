@@ -1,0 +1,176 @@
+# CLAUDE.md
+
+> 이 파일은 Claude Code 가 매 세션 자동으로 읽는다. 항상 지켜야 할 규칙과 프로젝트 맥락만 압축해서 담는다. 상세 내용은 `docs/` 를 참조한다.
+
+---
+
+## 프로젝트 한 줄 요약
+
+**{APP_NAME}** — {ONE_LINER}
+
+핵심 가설 — "{CORE_HYPOTHESIS}"
+
+<!--
+예시 (StartRoom):
+**StartRoom** — 혼자 일하는 사람이 익명 파트너와 함께 매일 계획대로 시작하고, 그 기록이 쌓여 자기 자신을 믿게 되는 모바일 앱 (Flutter, iOS+Android).
+핵심 가설 — "혼자는 시작이 어렵지만, 누군가와 함께라면 시작할 수 있다."
+-->
+
+---
+
+## 기술 스택 (요약)
+
+- **Framework** — {FRAMEWORK} (예: Flutter (Dart))
+- **State** — {STATE} (예: BLoC + Cubit — 복잡 → Bloc, 단순 → Cubit)
+- **Routing** — {ROUTING} (예: go_router)
+- **Models** — {MODELS} (예: freezed + json_serializable)
+- **Backend** — {BACKEND} (예: Supabase (Postgres + Realtime + Auth + Edge Functions))
+- **Auth** — {AUTH} (예: Supabase 익명 인증 `signInAnonymously`)
+- **Push** — {PUSH} (예: FCM 직접 구현)
+- **Analytics** — {ANALYTICS} (예: Amplitude)
+- **Crash** — {CRASH} (예: Sentry)
+- **Deep Link** — {DEEPLINK} (예: app_links, {DOMAIN})
+
+상세 — `docs/01_tech_stack.md`
+
+---
+
+## 문서 맵
+
+| 무엇이 필요한가 | 어느 문서 |
+|---|---|
+| 제품 정의 · 가설 · MVP 범위 | `docs/00_overview.md` |
+| 기술 스택 · pubspec · .env | `docs/01_tech_stack.md` |
+| 폴더 구조 · DB 스키마 · BLoC 패턴 | `docs/02_architecture.md` |
+| 특정 화면 명세 | `docs/03_screens/{화면}.md` |
+| 컬러 · 폰트 · 컴포넌트 | `docs/04_design_system.md` |
+| 화면 시각·동작 (디자인 진실) | `design/prototype/{화면}.jsx` (프로토타입 React) |
+| 일정 · 마일스톤 | `docs/05_roadmap.md` |
+| 수익모델 (V2/V3) | `docs/06_revenue_model.md` |
+| 결정 변경 이력 | `docs/07_decisions_log.md` |
+| Git · 테스트 · 배포 · 환경 | `docs/08_dev_ops.md` |
+
+**작업 시작 전, 관련 문서를 먼저 읽고 시작한다.**
+
+---
+
+## 절대 규칙 (Always)
+
+1. **컴포넌트 재사용 우선.** 새 위젯을 만들기 전에 `lib/shared/widgets/` 에 비슷한 게 있는지 먼저 확인한다. 있으면 재사용/확장, 없을 때만 새로 만든다.
+2. **하드코딩 금지.** 색상·간격·폰트 크기·문자열은 반드시 토큰/상수를 쓴다. `Color(0xFF...)` 나 매직 넘버를 위젯에 직접 쓰지 않는다. → `AppColors`, `AppSpacing`, `AppTextStyles`
+3. **UI 에서 Supabase 직접 호출 금지.** 모든 데이터 접근은 `Repository` 를 통한다. UI → Bloc → Repository → Supabase 순서.
+4. **모든 시간은 UTC 로 저장, 표시할 때 KST 변환.** DB 는 `timestamptz`, 클라이언트에서 `intl` 로 변환.
+5. **Realtime 구독은 화면 진입 시 시작, dispose 에서 반드시 해제.** 누수 주의.
+6. **에러는 삼키지 않는다.** try-catch 에서 Sentry 로 보고 + 사용자에게 적절한 에러 상태 표시.
+7. **dev/prod 환경을 섞지 않는다.** 항상 어느 flavor 인지 의식한다.
+8. **디자인은 프로토타입이 진실.** 화면을 구현할 때 `design/prototype/{화면}.jsx` (React) 를 시각·동작의 단일 진실로 삼는다. 색·간격·폰트·애니메이션·상태 전환은 추측하지 말고 그 코드의 실측값을 읽어 Flutter 로 포팅한다 (새로 디자인하지 않는다). `docs/03_screens/{화면}.md` 는 구조·상태·BLoC 연결·엣지케이스만 담당. 둘이 충돌하면 시각은 프로토타입, 동작 흐름·연결은 md.
+9. **{APP_SPECIFIC_RULE}** — 앱별 도메인 룰. 이 자리에 앱 정체성 관련 룰을 박음.
+    <!--
+    예시 (StartRoom): "혼자 시작은 없다" — 앱 내부의 옵션·상태·라벨·DB 값으로서의 "혼자/없이/solo" 는 금지 (매칭이 안 되면 Guide 가 파트너로 배정). 단, 사용자의 출발 문제를 묘사하는 카피 ("혼자가 아니라, 동료와 함께") 는 핵심 메시지이므로 유지.
+    -->
+10. **세션 시작 시 항상 새 브랜치 생성 후 작업.** main 에 직접 커밋 금지. 브랜치 네이밍 — `chore/{설명}` (설정·스캐폴딩), `feature/{설명}` (기능·화면), `fix/{설명}` (버그), `refactor/{설명}` (리팩토링). 다중 sub-work (2+ 회차 · 함께 배포해야 정합) 시 상위 통합 브랜치 `epic/{topic}` 을 main 에서 파생, sub-work 는 epic 에서 파생 (`feature/{topic}-{sub}` 등) — 상세 `docs/08_dev_ops.md` §2. 세션 끝나면 main 으로 머지하고 브랜치 삭제.
+11. **시간 표현 단일 진실 (룰 #4 구현 강제).** raw `DateTime.now()` 금지 — 항상 `appNow()` (`lib/core/datetime/clock.dart`). UTC → KST 변환은 `toKst(utc)`, KST → UTC 환산은 `kKstOffset` import (`lib/core/datetime/kst.dart`). 자체 `Duration(hours: 9)` / `_kstOffset` 정의 금지. 검증 — `grep -rnF "DateTime.now()" lib/ | grep -v clock.dart` 가 0 자리이어야 함.
+
+---
+
+## 절대 금지 (Never)
+
+1. **`.env*` 파일을 커밋하지 않는다.**
+2. **prod 환경에서 직접 테스트/실험하지 않는다.** 항상 dev 에서.
+3. **MVP 범위 밖 기능을 임의로 추가하지 않는다.** ({V2_FEATURES_EXAMPLE} 등은 V2+) 필요해 보여도 먼저 묻는다.
+4. **한 번에 너무 많이 만들지 않는다.** 작동하는 작은 단위로 쪼개서 구현하고 확인한다.
+5. **위젯을 미리 과하게 만들지 않는다.** 컴포넌트는 "필요해질 때" 추가한다. 추측으로 미리 만들지 않는다.
+
+---
+
+## 코딩 컨벤션
+
+### 네이밍
+
+- **파일** — snake_case — `home_screen.dart`, `room_bloc.dart`
+- **클래스** — PascalCase — `HomeScreen`, `RoomBloc`
+- **변수/함수** — camelCase — `roomId`, `createRoom()`
+- **상수** — lowerCamelCase (Dart 관례) — `defaultDuration`
+- **컴포넌트 위젯 접두사** — `{PREFIX}` (예: StartRoom = `Sr`) — `{PREFIX}Button`, `{PREFIX}Card`
+
+### 폴더 구조 (feature-first)
+
+```
+lib/
+├── app/          # MaterialApp, router, theme
+├── core/         # env, result, extensions, errors
+├── data/         # models, repositories, supabase
+├── features/     # 화면별 폴더 (home, ...)
+│   └── {feature}/
+│       ├── {feature}_screen.dart
+│       ├── {feature}_bloc.dart   (또는 _cubit)
+│       ├── {feature}_state.dart
+│       ├── {feature}_event.dart  (Bloc 만)
+│       └── widgets/              # 이 화면 전용 위젯
+└── shared/       # 공통 위젯, 아이콘, analytics
+```
+
+상세 — `docs/02_architecture.md`
+
+### BLoC 패턴
+
+- State 는 `Equatable` 상속 (또는 freezed)
+- 복잡한 화면 — full Bloc (Event → State)
+- 단순한 화면 — Cubit
+- Realtime stream 은 Bloc 안에서 `StreamSubscription` 으로 구독, 이벤트로 변환
+- 화면 전용 로직은 화면 폴더 안에, 공유 로직은 Repository 에
+
+### Git 커밋 (Conventional Commits)
+
+```
+feat: 새 기능       fix: 버그 수정
+refactor: 리팩토링   chore: 설정/잡일
+docs: 문서          test: 테스트
+```
+
+- 브랜치 — `feature/screen-home`, `fix/room-timer-sync`
+- main 은 항상 빌드 가능 상태 유지
+- 작동하는 단위로 커밋, 안 되는 코드는 커밋 금지
+
+상세 — `docs/08_dev_ops.md`
+
+---
+
+## 개발 철학 (작업 방식)
+
+공사 짓듯 단계적으로 — **기반 → 뼈대 → 화면 → 연결 → 기능 → 고도화**
+
+- **Week 1** — 기반 (환경 · 디자인 시스템 · 폴더 · DB · Realtime 검증)
+- **Week 2** — 화면 완성 (mock 데이터로 모든 UI)
+- **Week 3** — 기능 탑재 (Realtime · 매칭 · 푸시 · 딥링크) + 베타
+
+원칙:
+- 일정보다 **품질 우선**
+- 일별 일정은 가이드, 주별 마일스톤은 약속
+- 막히면 다음 작업으로, 빠르면 다음 작업 미리
+
+---
+
+## Supabase 작업 시 (MCP)
+
+이 프로젝트는 Supabase MCP 가 연결되어 있다 (**dev 환경만**).
+
+- 스키마 변경/마이그레이션은 MCP 로 직접 실행 가능
+- 단, 변경 전 `docs/02_architecture.md` 의 스키마와 일치하는지 확인
+- 스키마를 바꾸면 `docs/02_architecture.md` 도 함께 업데이트
+- prod 환경 작업은 MCP 로 하지 않는다 (Supabase CLI `db push`)
+
+---
+
+## 현재 단계
+
+- [ ] Week 1 — 기반 구축
+- [ ] Week 2 — 화면 완성
+- [ ] Week 3 — 기능 탑재 + 베타
+- [ ] Launch — QA · 스토어 등록 · prod deploy
+- [ ] Ops — amplitude taxonomy · beta observations · Sentry
+
+<!--
+회차별 상세 — `docs/work/{category}/{topic}-{yyyy-mm}/`
+가장 최근 회차 — {최근 회차 경로}
+-->
