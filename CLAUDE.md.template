@@ -20,16 +20,16 @@
 
 ## 기술 스택 (요약)
 
-- **Framework** — {FRAMEWORK} (예: Flutter (Dart))
-- **State** — {STATE} (예: BLoC + Cubit — 복잡 → Bloc, 단순 → Cubit)
-- **Routing** — {ROUTING} (예: go_router)
-- **Models** — {MODELS} (예: freezed + json_serializable)
-- **Backend** — {BACKEND} (예: Supabase (Postgres + Realtime + Auth + Edge Functions))
-- **Auth** — {AUTH} (예: Supabase 익명 인증 `signInAnonymously`)
-- **Push** — {PUSH} (예: FCM 직접 구현)
-- **Analytics** — {ANALYTICS} (예: Amplitude)
-- **Crash** — {CRASH} (예: Sentry)
-- **Deep Link** — {DEEPLINK} (예: app_links, {DOMAIN})
+- **Framework** — Flutter (Dart)
+- **State** — BLoC + Cubit (복잡 → Bloc, 단순 → Cubit)
+- **Routing** — go_router
+- **Models** — freezed + json_serializable
+- **Backend** — Supabase (Postgres + Realtime + Auth + Edge Functions)
+- **Auth** — Supabase 익명 인증 (`signInAnonymously`)
+- **Push** — FCM 직접 구현
+- **Analytics** — Amplitude
+- **Crash** — Sentry
+- **Deep Link** — app_links · {DOMAIN}
 
 상세 — `docs/01_tech_stack.md`
 
@@ -42,9 +42,9 @@
 | 제품 정의 · 가설 · MVP 범위 | `docs/00_overview.md` |
 | 기술 스택 · pubspec · .env | `docs/01_tech_stack.md` |
 | 폴더 구조 · DB 스키마 · BLoC 패턴 | `docs/02_architecture.md` |
-| 특정 화면 명세 | `docs/03_screens/{화면}.md` |
+| 화면 명세 (디자인 브리프) | `docs/03_screens/{화면}.md` |
 | 컬러 · 폰트 · 컴포넌트 | `docs/04_design_system.md` |
-| 화면 시각·동작 (디자인 진실) | `design/prototype/{화면}.jsx` (프로토타입 React) |
+| 화면 시각·동작 (디자인 진실) | `design/prototype/{화면}.jsx` (Claude 디자인 산출물, MCP read) |
 | 일정 · 마일스톤 | `docs/05_roadmap.md` |
 | 수익모델 (V2/V3) | `docs/06_revenue_model.md` |
 | 결정 변경 이력 | `docs/07_decisions_log.md` |
@@ -54,22 +54,30 @@
 
 ---
 
+## 상위 원칙 — 왜 아래 규칙들이 있는가
+
+**재사용성 · 유지보수 우선.** 코드 · 색 · 값 · 시간 표현이 곳곳에 흩어지면 브랜드 변경 · 리팩토링 · 버그 fix 시 blast radius 폭발. 룰 1·2·11 은 다 이 목적. 룰 5·6·7 은 안전성 (누수 · 에러 · 환경 오염) 목적. 룰 3·4·8 은 아키텍처 일관성 (계층 · 시간 · 디자인 진실) 목적.
+
+즉 아래 룰들은 **개별 안 지키면 즉시 문제** 나는 게 아니라 **누적되면 앱 전체가 흔들리는** 예방 룰.
+
+---
+
 ## 절대 규칙 (Always)
 
-1. **컴포넌트 재사용 우선.** 새 위젯을 만들기 전에 `lib/shared/widgets/` 에 비슷한 게 있는지 먼저 확인한다. 있으면 재사용/확장, 없을 때만 새로 만든다.
-2. **하드코딩 금지.** 색상·간격·폰트 크기·문자열은 반드시 토큰/상수를 쓴다. `Color(0xFF...)` 나 매직 넘버를 위젯에 직접 쓰지 않는다. → `AppColors`, `AppSpacing`, `AppTextStyles`
-3. **UI 에서 Supabase 직접 호출 금지.** 모든 데이터 접근은 `Repository` 를 통한다. UI → Bloc → Repository → Supabase 순서.
-4. **모든 시간은 UTC 로 저장, 표시할 때 KST 변환.** DB 는 `timestamptz`, 클라이언트에서 `intl` 로 변환.
-5. **Realtime 구독은 화면 진입 시 시작, dispose 에서 반드시 해제.** 누수 주의.
-6. **에러는 삼키지 않는다.** try-catch 에서 Sentry 로 보고 + 사용자에게 적절한 에러 상태 표시.
-7. **dev/prod 환경을 섞지 않는다.** 항상 어느 flavor 인지 의식한다.
-8. **디자인은 프로토타입이 진실.** 화면을 구현할 때 `design/prototype/{화면}.jsx` (React) 를 시각·동작의 단일 진실로 삼는다. 색·간격·폰트·애니메이션·상태 전환은 추측하지 말고 그 코드의 실측값을 읽어 Flutter 로 포팅한다 (새로 디자인하지 않는다). `docs/03_screens/{화면}.md` 는 구조·상태·BLoC 연결·엣지케이스만 담당. 둘이 충돌하면 시각은 프로토타입, 동작 흐름·연결은 md.
+1. **컴포넌트 재사용 우선.** 새 위젯을 만들기 전에 `lib/shared/widgets/` 에 비슷한 게 있는지 먼저 확인한다. 있으면 재사용/확장, 없을 때만 새로 만든다. (재사용성)
+2. **하드코딩 금지.** 색상·간격·폰트 크기·문자열은 반드시 토큰/상수를 쓴다. `Color(0xFF...)` 나 매직 넘버를 위젯에 직접 쓰지 않는다. → `AppColors`, `AppSpacing`, `AppTextStyles`. (재사용성)
+3. **UI 에서 Supabase 직접 호출 금지.** 모든 데이터 접근은 `Repository` 를 통한다. UI → Bloc → Repository → Supabase 순서. (계층 일관성)
+4. **모든 시간은 UTC 로 저장, 표시할 때 KST 변환.** DB 는 `timestamptz`, 클라이언트에서 `intl` 로 변환. (시간 진실)
+5. **Realtime 구독은 화면 진입 시 시작, dispose 에서 반드시 해제.** 누수 주의. (안전성)
+6. **에러는 삼키지 않는다.** try-catch 에서 Sentry 로 보고 + 사용자에게 적절한 에러 상태 표시. (안전성)
+7. **dev/prod 환경을 섞지 않는다.** 항상 어느 flavor 인지 의식한다. (안전성)
+8. **디자인은 프로토타입이 진실.** 화면을 구현할 때 `design/prototype/{화면}.jsx` (Claude 디자인 산출물, Claude Code 에서 MCP 로 read) 를 시각·동작의 단일 진실로 삼는다. 색·간격·폰트·애니메이션·상태 전환은 추측하지 말고 그 코드의 실측값을 읽어 Flutter 로 포팅한다 (새로 디자인하지 않는다). `docs/03_screens/{화면}.md` 는 디자인 브리프 · 구조·상태·엣지케이스만 담당. 둘이 충돌하면 시각은 프로토타입, 동작 흐름·연결은 md. (디자인 진실)
 9. **{APP_SPECIFIC_RULE}** — 앱별 도메인 룰. 이 자리에 앱 정체성 관련 룰을 박음.
     <!--
     예시 (StartRoom): "혼자 시작은 없다" — 앱 내부의 옵션·상태·라벨·DB 값으로서의 "혼자/없이/solo" 는 금지 (매칭이 안 되면 Guide 가 파트너로 배정). 단, 사용자의 출발 문제를 묘사하는 카피 ("혼자가 아니라, 동료와 함께") 는 핵심 메시지이므로 유지.
     -->
-10. **세션 시작 시 항상 새 브랜치 생성 후 작업.** main 에 직접 커밋 금지. 브랜치 네이밍 — `chore/{설명}` (설정·스캐폴딩), `feature/{설명}` (기능·화면), `fix/{설명}` (버그), `refactor/{설명}` (리팩토링). 다중 sub-work (2+ 회차 · 함께 배포해야 정합) 시 상위 통합 브랜치 `epic/{topic}` 을 main 에서 파생, sub-work 는 epic 에서 파생 (`feature/{topic}-{sub}` 등) — 상세 `docs/08_dev_ops.md` §2. 세션 끝나면 main 으로 머지하고 브랜치 삭제.
-11. **시간 표현 단일 진실 (룰 #4 구현 강제).** raw `DateTime.now()` 금지 — 항상 `appNow()` (`lib/core/datetime/clock.dart`). UTC → KST 변환은 `toKst(utc)`, KST → UTC 환산은 `kKstOffset` import (`lib/core/datetime/kst.dart`). 자체 `Duration(hours: 9)` / `_kstOffset` 정의 금지. 검증 — `grep -rnF "DateTime.now()" lib/ | grep -v clock.dart` 가 0 자리이어야 함.
+10. **세션 시작 시 항상 새 브랜치 생성 후 작업.** main 에 직접 커밋 금지. 브랜치 네이밍 — `chore/{설명}` (설정·스캐폴딩), `feature/{설명}` (기능·화면), `fix/{설명}` (버그), `refactor/{설명}` (리팩토링). 다중 sub-work (2+ 회차 · 함께 배포해야 정합) 시 상위 통합 브랜치 `epic/{topic}` 을 main 에서 파생, sub-work 는 epic 에서 파생 (`feature/{topic}-{sub}` 등) — 상세 `docs/08_dev_ops.md` §2. 세션 끝나면 main 으로 머지하고 브랜치 삭제. (계층 일관성)
+11. **시간 표현 단일 진실 (룰 #4 구현 강제).** raw `DateTime.now()` 금지 — 항상 `appNow()` (`lib/core/datetime/clock.dart`). UTC → KST 변환은 `toKst(utc)`, KST → UTC 환산은 `kKstOffset` import (`lib/core/datetime/kst.dart`). 자체 `Duration(hours: 9)` / `_kstOffset` 정의 금지. 검증 — `grep -rnF "DateTime.now()" lib/ | grep -v clock.dart` 가 0 이어야 함. (재사용성 · 시간 진실)
 
 ---
 
@@ -97,28 +105,31 @@
 
 ```
 lib/
-├── app/          # MaterialApp, router, theme
-├── core/         # env, result, extensions, errors
-├── data/         # models, repositories, supabase
-├── features/     # 화면별 폴더 (home, ...)
+├── app/          # MaterialApp, router, theme, theme_cubit, bloc_observer, motion
+├── core/         # env, bootstrap, constants, datetime, errors, identity, push, permissions, settings, utils
+├── data/         # models, repositories, services, supabase
+├── entry/        # entry.dev.dart, entry.prod.dart (flavor 진입점)
+├── features/     # 화면별 폴더 (home, room, ...)
 │   └── {feature}/
 │       ├── {feature}_screen.dart
 │       ├── {feature}_bloc.dart   (또는 _cubit)
 │       ├── {feature}_state.dart
 │       ├── {feature}_event.dart  (Bloc 만)
 │       └── widgets/              # 이 화면 전용 위젯
-└── shared/       # 공통 위젯, 아이콘, analytics
+└── shared/       # 공통 위젯 ({PREFIX}*), 아이콘, analytics
 ```
 
 상세 — `docs/02_architecture.md`
 
 ### BLoC 패턴
 
-- State 는 `Equatable` 상속 (또는 freezed)
+- State 는 `Equatable` 상속 (또는 freezed sealed)
 - 복잡한 화면 — full Bloc (Event → State)
 - 단순한 화면 — Cubit
-- Realtime stream 은 Bloc 안에서 `StreamSubscription` 으로 구독, 이벤트로 변환
+- Realtime stream 은 Bloc 안에서 `StreamSubscription` 으로 구독, 이벤트로 변환. `close()` 오버라이드에서 cancel
 - 화면 전용 로직은 화면 폴더 안에, 공유 로직은 Repository 에
+
+상세 코드 — `stack/flutter/rule-enforcement/bloc-vs-cubit.md`
 
 ### Git 커밋 (Conventional Commits)
 

@@ -12,22 +12,32 @@
 ```
 {APP_SLUG}/
 ├── lib/
-│   ├── main.dart
 │   ├── app/
 │   │   ├── app.dart                 # MaterialApp + MultiRepositoryProvider + ThemeCubit wiring
-│   │   ├── router.dart              # go_router config
-│   │   ├── theme.dart               # Palette (ThemeExtension · 다크/라이트) · context.colors 확장
+│   │   ├── router.dart              # go_router config (라우트 정의)
+│   │   ├── theme.dart               # Palette extends ThemeExtension (다크/라이트 두 벌) · context.colors 확장
 │   │   ├── theme_cubit.dart         # ThemeMode 상태 · SharedPreferences 저장
-│   │   └── bloc_observer.dart       # 전역 Bloc 로깅 + onError Sentry 보고
+│   │   ├── motion.dart              # AppDurations · AppCurves 토큰
+│   │   └── bloc_observer.dart       # 전역 Bloc 라이프사이클 로깅 + onError Sentry 보고
 │   ├── core/
-│   │   ├── env.dart                 # 환경 변수 접근 (dart-define)
+│   │   ├── env.dart                 # AppEnv (dart-define 컴파일 상수)
+│   │   ├── bootstrap.dart           # Firebase/Supabase/Amplitude/Push 초기화 순서
 │   │   ├── constants.dart           # 도메인 상수 (DB 와 짝)
-│   │   ├── datetime/                # clock · kst · format_duration (룰 #11 강제)
-│   │   └── errors/                  # sealed AppError + postgrest_wrap
+│   │   ├── datetime/                # clock (appNow) · kst (toKst) · format_duration (룰 #11)
+│   │   ├── errors/                  # sealed AppError + postgrest_wrap
+│   │   ├── identity/                # install_id · stable_device_id
+│   │   ├── push/                    # push_service (FCM) · local_notif
+│   │   ├── permissions/             # camera · notif 등
+│   │   ├── settings/                # settings_prefs (SharedPreferences)
+│   │   └── utils/                   # avatar_color 등 순수 헬퍼
 │   ├── data/
-│   │   ├── models/                  # freezed
-│   │   ├── repositories/            # abstract + impl 쌍
+│   │   ├── models/                  # freezed 모델 (Profile, Room, ...)
+│   │   ├── repositories/            # abstract + impl 쌍 (AuthRepo, RoomRepo, StatsRepo, ...)
+│   │   ├── services/                # 도메인 서비스 (매칭 라우팅 · 통계 집계 · 캐시)
 │   │   └── supabase/                # client · channels · queries
+│   ├── entry/
+│   │   ├── entry.dev.dart           # dev flavor 진입점 · main() { bootstrap(env: AppEnv.dev); }
+│   │   └── entry.prod.dart          # prod flavor 진입점
 │   ├── features/                    # 화면별 폴더
 │   │   └── {feature}/
 │   │       ├── {feature}_screen.dart
@@ -37,18 +47,25 @@
 │   │       └── widgets/             # 이 화면 전용 위젯
 │   ├── shared/
 │   │   ├── widgets/                 # {PREFIX}Button, {PREFIX}Card, ...
-│   │   ├── icons/                   # phosphor 매핑
-│   │   └── analytics.dart           # analytics wrapper
+│   │   ├── icons/                   # phosphor 매핑 · SR 아이콘 의미 이름
+│   │   └── analytics.dart           # Amplitude wrapper (track · identify · setUserId)
 │   └── l10n/                        # ko 우선, en 차후
 ├── supabase/
-│   ├── migrations/                  # 실제 스키마의 진실
+│   ├── migrations/                  # 실제 스키마의 진실 · 001, 002, ... 순차 파일
 │   └── functions/                   # Edge Functions
 ├── assets/
-├── test/                            # repository + bloc 단위
+├── test/
 ├── pubspec.yaml
 ├── CLAUDE.md
+├── analysis_options.yaml
+├── flutter_launcher_icons.yaml
 └── .env.dev / .env.prod / .env.example
 ```
+
+**핵심 원칙.**
+- **feature-first** — 화면별 폴더 · 공통은 `shared/`. layer-first (models/ · views/ · controllers/ 등) 보다 화면 개발·리팩토링 단위 명확
+- **entry 분리** — `main.dart` 아닌 `lib/entry/entry.{flavor}.dart` (룰 #7)
+- **core 세분** — 성격별 서브 폴더. 한 폴더에 100 파일 몰지 않음
 
 ---
 
@@ -60,7 +77,7 @@
 
 | 테이블 | 목적 | 비고 |
 |---|---|---|
-| `profiles` | {목적} | {특이사항} |
+| `profiles` | {목적 · 사용자 프로필} | 익명 인증 · 자동 닉네임 |
 | `{TABLE_2}` | {목적} | {특이사항} |
 | ... | ... | ... |
 
@@ -73,20 +90,33 @@ profiles ──< {ENTITY_1} >── ...
 
 ## 3. BLoC 패턴
 
-- **State** — `Equatable` 상속 (또는 freezed)
-- **복잡한 화면** — full Bloc (Event → State)
-- **단순한 화면** — Cubit
-- **Realtime stream** — Bloc 안에서 `StreamSubscription` 구독, 이벤트로 변환. dispose 에서 해제 (룰 #5)
+- **State** — `Equatable` 상속 (또는 freezed sealed)
+- **복잡한 화면** — full Bloc (Event → State · 상태 머신 명시적)
+- **단순한 화면** — Cubit (가볍고 빠름)
+- **Realtime stream** — Bloc 안 `StreamSubscription` 으로 구독, `add(Event)` 로 변환. `close()` 오버라이드에서 `cancel()` 필수 (룰 #5 강제)
+- **에러** — Bloc 안 `try/catch` · `emit(errorState)` + `rethrow` (BlocObserver 가 Sentry 자동 보고 · 룰 #6)
 
-상세 코드 예시 — `stack/flutter/rule-enforcement/bloc-vs-cubit.md`
+상세 코드 — `stack/flutter/rule-enforcement/bloc-vs-cubit.md`
 
 ---
 
 ## 4. Repository 인터페이스
 
-- UI 는 Supabase 직접 호출 금지 (룰 #3). Repository 를 통한다
-- Repository = abstract + impl 쌍 (테스트 mock 용이)
-- 필드 — `AuthRepo` · `{DOMAIN}Repo` · `NotificationRepo` · ...
+- **UI 는 Supabase 직접 호출 금지** (룰 #3). Repository 를 통한다
+- **abstract + impl 쌍** — 테스트 mock 용이 · 다른 백엔드 (예: REST → GraphQL) 로 교체 유연
+- **Postgrest 예외 매핑** — `wrapPostgrest()` 헬퍼로 `PostgrestException` → `NetworkError`/`NotFoundError`/`UnauthorizedError` 변환. UI 는 `AppError` 만 catch
+
+```dart
+// lib/data/repositories/{domain}_repository.dart (abstract)
+abstract class {Domain}Repository {
+  Future<{Model}> get(String id);
+  Stream<List<{Model}>> watchAll();
+  Future<void> update(...);
+}
+
+// lib/data/repositories/{domain}_repository_impl.dart
+class Supabase{Domain}Repository implements {Domain}Repository { ... }
+```
 
 ---
 
@@ -94,11 +124,38 @@ profiles ──< {ENTITY_1} >── ...
 
 - dev / prod flavor 분리 (룰 #7)
 - 진입점 — `lib/entry/entry.dev.dart` · `entry.prod.dart`
-- `--dart-define-from-file=.env.{flavor}` 필수
-- 상세 — `stack/flutter/rule-enforcement/flavor-setup.md`
+- `--dart-define-from-file=.env.{flavor}` 필수 (누락 시 실기기 크래시)
+- 상세 코드 — `stack/flutter/rule-enforcement/flavor-setup.md`
 
 ---
 
-## 예시 (StartRoom)
+## 6. Theme · ThemeExtension 패턴
 
-> 실 채운 예 — StartRoom `docs/02_architecture.md`. 8개 테이블 (profiles · rooms · room_participants · room_events · tasks · retrospectives · match_queue · notifications) + 12쌍 Repository.
+- `Palette extends ThemeExtension<Palette>` — 다크/라이트 두 벌
+- `context.colors` extension 으로 접근 (`context.colors.accent` · `context.colors.bg`)
+- **Fill/Ink 페어 분리** — 라이트 mode 에서 accent fill 을 텍스트/border 로 쓰면 WCAG AA 실패 → fill · ink 분리
+- **다크 고정 예외** — 공유 카드 · QR chrome · Dev 스크린 등 명시적 예외 (`Palette.dark.*` 정적 접근)
+- 상세 — `stack/flutter/rule-enforcement/design-tokens.md`
+
+---
+
+## 7. 도메인 상수는 DB 와 짝
+
+- `lib/core/constants.dart` 에 정의된 값 (예: 방 코드 길이 · 매칭 윈도우 · streak 리셋 시각) 은 DB migration · Edge Function 과 정합 유지
+- 코드에서 하드코딩 X · 상수 참조
+
+---
+
+## 8. Realtime 채널 관리
+
+- `lib/data/supabase/channels.dart` — 채널 factory 한 곳
+- 화면 진입 시 subscribe · dispose 에서 unsubscribe (룰 #5)
+- publication 등록된 테이블만 실 realtime 동작 (`alter publication supabase_realtime add table {table}`)
+- silent trigger 패턴 (알림 vs realtime 신호 분리) — 필요 시 `mcp/supabase-dev-vs-prod.md` tips 참조
+
+---
+
+## 9. 예시 (StartRoom)
+
+> 실 채운 예 — StartRoom `docs/02_architecture.md`.
+> 8개 테이블 (profiles · rooms · room_participants · room_events · tasks · retrospectives · match_queue · notifications) · 12쌍 Repository · Room 화면만 full Bloc · 나머지 Cubit · Realtime 3채널 (room · participants · events).

@@ -1,62 +1,99 @@
-# 03. 화면 명세
+# 03. 화면 명세 (디자인 브리프)
 
-> 화면별 상세 명세 (라우트 · 상태 · UI 컴포넌트 · 엣지케이스).
-> **주의** — 시각·동작·애니메이션은 프로토타입 (`design/prototype/{화면}.jsx`) 이 진실. 여기는 구조·상태·BLoC 연결·엣지케이스만 담당 (룰 #8).
-
-**구조.** `docs/03_screens/{screen-name}.md` 개별 파일. 이 template 은 개별 화면 파일의 원형.
+> **성격 — 기획 → 디자인 넘어갈 때 디자인 도움 되는 재료.** 디자인 확정 결과 X, 디자인이 참고할 브리프.
+> 각 화면 = `docs/03_screens/{screen-name}.md` 개별 파일. 이 template 은 개별 화면 파일의 원형.
+> UI 컴포넌트·프로토타입 참조·Bloc 연결은 디자인·개발 완료 후 sync (프로토타입은 별도 `design/prototype/`, Bloc 은 `features/`).
 
 ---
 
 ## {SCREEN_NAME} 화면
 
-### 1. 라우트
-- Path — `/{path}`
-- 진입 — {진입 조건 · 이전 화면}
-- 이탈 — {가능한 이탈 경로}
+### 1. 화면 목적 · 사용자 goal
 
-### 2. Bloc / Cubit
-- 이름 — `{ScreenName}Cubit` (또는 `{ScreenName}Bloc`)
-- 판단 — {단순 Cubit · 복잡 Bloc}
-- 의존 — {Repository 목록}
-- Realtime 구독 — {있음 · 없음 · 어떤 채널}
+한 문장으로 — {WHO} 가 {WHAT} 을 하기 위한 화면.
 
-### 3. 상태 (State)
-```dart
-// {ScreenName}State 필드
-class {ScreenName}State {
-  final Loading/Loaded/Error 등 sealed 또는 Equatable
-  // ...
-}
-```
+세부 —
+- 사용자가 이 화면에서 달성하려는 것 (task) 1~3개
+- 이 화면이 없으면 어떤 문제가 생기는지
 
-### 4. UI 컴포넌트 (프로토타입 참조)
-- 프로토타입 — `design/prototype/{screen-name}.jsx`
-- 사용 SR 위젯 — {목록}
-- 화면 전용 위젯 — `features/{screen-name}/widgets/` 안
+### 2. 진입 조건 · 이탈 조건
+
+**진입.**
+- 어느 화면에서 · 어떤 사용자 액션 · 어떤 조건에서 이 화면 도달
+- 딥링크·푸시 진입 여부 (있으면 URL 패턴)
+
+**이탈.**
+- 정상 이탈 (완료 · 다음 화면 이동)
+- 취소 이탈 (뒤로 · X · dismiss)
+- 자동 이탈 (타임아웃 · 조건 변경)
+
+### 3. 사용자 액션 목록
+
+이 화면에서 사용자가 할 수 있는 액션 나열. 액션마다 —
+- 액션 이름 (버튼 라벨 등)
+- 액션 후 결과 (다음 상태 · 다음 화면 · 서버 호출 여부)
+- 액션 조건 (활성 · 비활성 조건)
+
+### 4. 상태 목록
+
+이 화면이 가질 수 있는 상태.
+- **loading** — 무엇을 기다리는가 · 예상 소요
+- **empty** — 데이터 없을 때 UI · 카피
+- **error** — 어떤 에러 유형 · 재시도 여부
+- **success/loaded** — 정상 데이터 있을 때
+- **{도메인 특수 상태}** — 예: waiting · ready · live · completed
+
+각 상태 전환 조건 · 트리거 명시.
 
 ### 5. 엣지케이스
-- 빈 상태 — {UI · 카피}
-- 로딩 상태 — {SR loading view · skeleton}
-- 에러 상태 — {SR error view · 재시도}
-- 오프라인 — {처리 방식}
-- 권한 거부 — {처리 방식}
-- {도메인 특수 케이스}
 
-### 6. Analytics 이벤트
-- 화면 진입 — `{screen_name}_viewed`
-- 액션 — `{action_name}` (property)
+- **권한** — 필요 권한 · 거부 시 처리 · 재요청 flow
+- **오프라인** — 네트워크 끊김 시 처리
+- **데이터 없음** — 최초 진입 · 이전 삭제
+- **동시 진행** — 다른 유저 · 다른 세션 영향
+- **{도메인 특수 케이스}** — 예: 파트너 이탈 · 세션 만료
+
+### 6. 화면 간 관계
+
+이 화면과 연결된 다른 화면 목록.
+- 이 화면 이전 화면들 (어떤 진입 경로들이 있는가)
+- 이 화면 다음 화면들 (어떤 이탈 경로들이 있는가)
+- 관련 sheet · modal · popup
+
+### 7. 카피 톤 방향
+
+이 화면 카피의 톤 · 지침.
+- 감정 톤 (친근 · 진중 · 활기 · 절제 등)
+- 사용자 호칭 (2인칭 vs 3인칭)
+- 브랜드 카피 원칙 (있으면)
+- 피해야 할 표현
+
+### 8. 참고 competitor (있으면)
+
+비슷한 목적 다른 앱 화면 · 링크 · 무엇을 참고할지·무엇은 다를지.
+
+### 9. Analytics 이벤트 (초안 · 배포 phase 확정)
+
+- 화면 진입 — `{screen_name}__view`
+- 주요 액션 — `{screen_name}__click__{object}`
 - 상세 — `docs/work/amplitude-taxonomy/catalog.md` (배포 phase)
 
-### 7. Deep link (해당 시)
-- URL 패턴 — `https://{DOMAIN}/{path}?{params}`
-- 처리 — `app_links` · `router.dart` redirect
+### 10. 관련 결정 이력
 
-### 8. 관련 결정 이력
-- {D-XX 결정 링크}
+- {D-XX 결정 링크 · 결정 근거}
+
+---
+
+## (디자인·개발 후 sync 되는 부분 · 여기 미리 안 씀)
+
+- 프로토타입 파일 — `design/prototype/{screen-name}.jsx` (Claude 디자인 산출물, 확정 후 링크)
+- UI 컴포넌트 목록 — 프로토타입 확정 후 SR 위젯 목록 sync
+- Bloc/Cubit — `features/{screen-name}/` 개발 후 sync
+- State dart 코드 — 개발 후 sync
 
 ---
 
 ## 예시 (StartRoom)
 
-> 실 채운 예 — StartRoom `docs/03_screens/home.md`, `room.md`, `matched.md` 등. 화면별 개별 파일. 각 파일이 이 template 구조를 따름.
-> 프로토타입 진실 원칙 (룰 #8) 은 StartRoom 에서도 엄격히 적용됨.
+> 실 채운 예 — StartRoom `docs/03_screens/home.md`, `room.md`, `matched.md` 등. 각 화면별 개별 파일.
+> StartRoom 은 이미 디자인·개발 완료 상태라 프로토타입·Bloc·State 세부까지 sync 되어 있지만 template 은 "디자인 넘어가기 전" 상태 기준.

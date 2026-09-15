@@ -34,8 +34,8 @@
 
 **순서**
 
-1. `docs/03_screens/` 기반 → Claude 디자인 MCP 로 각 화면 프로토타입 생성
-2. `design/prototype/{화면}.jsx` 저장
+1. `docs/`와 `docs/03_screens/` 기반 → Claude 디자인에서 각 화면 프로토타입 생성
+2. Claude Code에서 MCP를 통해 Claude 디자인 산출물 체크
 3. 프로토타입 iteration — 시각·상호작용·애니메이션 확정
 4. `docs/04_design_system.md` 확정 — 프로토타입 실측 팔레트·토큰 값
 
