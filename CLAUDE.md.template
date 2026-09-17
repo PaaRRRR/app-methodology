@@ -77,7 +77,7 @@
     <!--
     예시 (StartRoom): "혼자 시작은 없다" — 앱 내부의 옵션·상태·라벨·DB 값으로서의 "혼자/없이/solo" 는 금지 (매칭이 안 되면 Guide 가 파트너로 배정). 단, 사용자의 출발 문제를 묘사하는 카피 ("혼자가 아니라, 동료와 함께") 는 핵심 메시지이므로 유지.
     -->
-10. **세션 시작 시 항상 새 브랜치 생성 후 작업.** main 에 직접 커밋 금지. 브랜치 네이밍 — `chore/{설명}` (설정·스캐폴딩), `feature/{설명}` (기능·화면), `fix/{설명}` (버그), `refactor/{설명}` (리팩토링). 다중 sub-work (2+ 회차 · 함께 배포해야 정합) 시 상위 통합 브랜치 `epic/{topic}` 을 main 에서 파생, sub-work 는 epic 에서 파생 (`feature/{topic}-{sub}` 등). **큰 스코프 (여러 § · 여러 회차 · 여러 파일) 작업은 코드 진입 전 `docs/work/{category}/{topic}-{yyyy-mm}/plan.md` + `checklist.md` 를 먼저 만든다** (간단 fix 는 skip). 세션 끝나면 main 으로 머지하고 브랜치 삭제. 상세 — `docs/08_dev_ops.md` §2. (계층 일관성)
+10. **세션 시작 시 항상 새 브랜치 생성 후 작업.** main 에 직접 커밋 금지. 브랜치 네이밍 — `chore` (설정·스캐폴딩), `feature` (기능·화면), `fix` (버그), `refactor` (리팩토링). 다중 sub-work (2+ 회차 · 함께 배포해야 정합) 시 상위 통합 브랜치 `epic` 을 main 에서 파생, sub-work 는 epic 에서 파생 (`feature/{topic}-{sub}` 등). **큰 스코프 (여러 § · 여러 회차 · 여러 파일) 작업은 코드 진입 전 `docs/work/{category}/{topic}-{yyyy-mm}/plan.md` + `checklist.md` 를 먼저 만든다** (간단 fix 는 skip). 세션 끝나면 main 으로 머지하고 브랜치 삭제. 상세 — `docs/08_dev_ops.md` §2. (계층 일관성)
 11. **시간 표현 단일 진실 (룰 #4 구현 강제).** raw `DateTime.now()` 금지 — 항상 `appNow()` (`lib/core/datetime/clock.dart`). UTC → KST 변환은 `toKst(utc)`, KST → UTC 환산은 `kKstOffset` import (`lib/core/datetime/kst.dart`). 자체 `Duration(hours: 9)` / `_kstOffset` 정의 금지. 검증 — `grep -rnF "DateTime.now()" lib/ | grep -v clock.dart` 가 0 이어야 함. (재사용성 · 시간 진실)
 
 ---

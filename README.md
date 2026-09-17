@@ -5,6 +5,24 @@
 
 ---
 
+## 한눈에 (Phase × 산출물 × 참조)
+
+| Phase | 성격 | 신규 앱 산출물 위치 | 이 저장소 참조 |
+|---|---|---|---|
+| **0. 기획** | 자유 · 탐색 | `docs/planning/plan.md` | `docs-templates/00_planning/plan.template.md` |
+| **1. 와이어프레임** | 자유 · 탐색 | `docs/planning/wireframe.md` | `docs-templates/00_planning/wireframe.template.md` |
+| **2. 디자인** | MCP iteration → 확정 시 export | `design/prototype/{screen}.jsx` × N | `docs-templates/02_design/README.template.md` |
+| **3. Docs 정합화** | 확정 진실 | `docs/00~08.md` + `docs/03_screens/` + `CLAUDE.md` | `docs-templates/03_product/*` + `CLAUDE.md.template` |
+| **4. Code** | 3주 실행 | `lib/` | `docs-templates/03_product/05_roadmap.template.md` + `stack/flutter/*` |
+| **5. Launch** | 배포 준비 | 스토어 · 심사 · legal | `docs-templates/05_launch/*` + `docs-templates/legal/*` |
+| **6. Ops** | 배포 후 필수 | `docs/work/...` + 대시보드 | `docs-templates/06_ops/*` |
+
+**매 회차 (Phase 3~ 진입 시)** — [`workflow/session-workflow.md`](./workflow/session-workflow.md) 따라 새 브랜치 → plan.md → 수행 → analyze/test → 사용자 OK → 의미 단위 commit → 머지.
+
+**Skip 가능** — 이미 완료된 phase 는 건너뜀 (예: 기획+디자인 완료 시 Phase 3 부터). Phase 별 상세 진입 순서 = [`milestone-order.md`](./milestone-order.md).
+
+---
+
 ## 이 저장소 사용법 (다음 앱 시작 시)
 
 > ⚠️ **Template 은 참조 자료 · 그대로 복사해서 쓰지 X.** 각 template 의 **공통 원칙** (앱 무관 · WCAG · 아키텍처 등) 은 유지하되 **placeholder · 예시 값 · StartRoom 특화 자리** 는 반드시 새 앱 정체성·도메인·화면에 맞게 재작성. 그대로 두면 새 앱이 StartRoom clone 이 됨.
