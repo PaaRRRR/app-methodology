@@ -4,6 +4,9 @@
 
 이 문서는 {APP_NAME} 의 제품 정의, 핵심 가설, MVP 범위, 그리고 개발 착수 전 확정한 모든 핵심 결정사항을 담는다. 다른 모든 문서의 기준점이 되는 단일 진실 공급원 (source of truth).
 
+> **성격 —** Phase 0 (기획) · Phase 1 (와이어프레임) · Phase 2 (디자인) 확정 후 채우는 **진실 요약** 자리. 탐색 문서 X · 확정본 O.
+> Phase 0-1 자유 형식 원본은 `docs/planning/plan.md` · `docs/planning/wireframe.md` · Phase 2 프로토타입은 `design/prototype/*.jsx`. 이 문서는 그것들에서 확정된 것만 정합화.
+
 ---
 
 ## 1. 제품 정의
@@ -93,7 +96,8 @@
 | {화면} | `/{route}` | {상태} |
 | Settings | `/settings` | 프로필 · 알림 · 계정 |
 
-상세 — `03_screens/{화면}.md`
+화면 아키텍처 · IA · flow — `03_screens/README.md`
+개별 화면 상세 — `03_screens/{화면}.md`
 
 ---
 
@@ -194,7 +198,8 @@
 | `00_overview.md` | 이 문서 — 전체 개요 + 결정 요약 |
 | `01_tech_stack.md` | 기술 스택 상세 + pubspec.yaml + .env |
 | `02_architecture.md` | 폴더 구조 + DB 스키마 + BLoC 패턴 |
-| `03_screens/` | 화면별 디자인 브리프 |
+| `03_screens/README.md` | 화면 아키텍처 · IA · user flow · 상태 원칙 |
+| `03_screens/{화면}.md` | 화면별 개발 handoff 명세 (상태 · 인터랙션 · 데이터 · BLoC 연결) |
 | `04_design_system.md` | 디자인 토큰 + 컴포넌트 |
 | `05_roadmap.md` | Week 1-3 로드맵 + 출시 후 1주 |
 | `06_revenue_model.md` | V1/V2/V3 수익모델 |

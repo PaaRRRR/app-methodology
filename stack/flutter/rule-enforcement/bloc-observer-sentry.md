@@ -201,4 +201,4 @@ Bloc.observer = const AppBlocObserver();
 ## 관련 룰
 
 - 룰 #6 — 에러 삼키지 않음 (개념)
-- `docs-templates/product/08_dev_ops.template.md` §5 — Sentry Day 1 setup + issue triage flow
+- `docs-templates/03_product/08_dev_ops.template.md` §5 — Sentry Day 1 setup + issue triage flow

@@ -90,7 +90,7 @@
 4. 시뮬레이터 재설치 → 시각 회귀
 5. Play Store / App Store 콘솔 PNG 업로드
 
-**앱 아이콘 vs 앱 내부 accent 의도적 분리 가능** — 아이콘 = 스토어 진열대 impact · 앱 내부 = 장시간 피로 회피. 참조 — `/docs-templates/product/04_design_system.template.md` §1-5.
+**앱 아이콘 vs 앱 내부 accent 의도적 분리 가능** — 아이콘 = 스토어 진열대 impact · 앱 내부 = 장시간 피로 회피. 참조 — `/docs-templates/03_product/04_design_system.template.md` §1-5.
 
 ---
 
@@ -272,7 +272,7 @@ App Store Connect "What's New in This Version" + Play Console "출시 노트" ·
 첫 출시 시 순차 진행. 이후 재제출 시엔 변경 자리만.
 
 ### Phase 1 — 준비 (문서·자산)
-- [ ] **베타 검증 완료 확인** — TestFlight (iOS) · Firebase App Distribution (Android) 로 실기기 QA 통과. 상세 — `/docs-templates/product/08_dev_ops.template.md` §6-A
+- [ ] **베타 검증 완료 확인** — TestFlight (iOS) · Firebase App Distribution (Android) 로 실기기 QA 통과. 상세 — `/docs-templates/03_product/08_dev_ops.template.md` §6-A
 - [ ] **legal URL 준비** — `docs/legal/{terms,privacy}` 콘텐츠를 landing site (`{DOMAIN}/terms` · `/privacy`) 에 배포. App Store `App Privacy` + Play `Privacy Policy URL` 둘 다 필수 (인앱 표시만으론 심사 통과 X)
 - [ ] **Support 이메일** 확정
 - [ ] **앱 아이콘** — 1024 원본 + `flutter_launcher_icons` 생성 (§4)
@@ -286,7 +286,7 @@ App Store Connect "What's New in This Version" + Play Console "출시 노트" ·
 - [ ] **개인정보 답변** — Apple App Privacy + Play Data Safety (§10)
 - [ ] **Reviewer Notes** 작성 (§9)
 - [ ] **스크린샷 · Feature Graphic** 업로드
-- [ ] **Play Console 폐쇄 테스트 12명 · 14일 요건** — 2023+ 정식 출시 전 필수 (`/docs-templates/product/08_dev_ops.template.md` §6-A)
+- [ ] **Play Console 폐쇄 테스트 12명 · 14일 요건** — 2023+ 정식 출시 전 필수 (`/docs-templates/03_product/08_dev_ops.template.md` §6-A)
 
 ### Phase 3 — Signing · 빌드
 - [ ] **iOS Signing** — App Store **Distribution Provisioning Profile** + **Distribution Certificate** (Xcode automatic signing 활용 or 수동)
@@ -302,7 +302,7 @@ App Store Connect "What's New in This Version" + Play Console "출시 노트" ·
 ### Phase 5 — 롤아웃
 - [ ] 심사 통과 확인 (iOS 24-48h · Android 4-24h 일반)
 - [ ] iOS + Android 동시 수동 출시 (or 각자 롤아웃)
-- [ ] Post-deploy 관측 (Sentry · Amplitude). 관측 protocol — `/docs-templates/ops/beta-observations/protocol.template.md` · 출시 후 첫 1주 flow — `/docs-templates/product/05_roadmap.template.md` Week 4
+- [ ] Post-deploy 관측 (Sentry · Amplitude). 관측 protocol — `/docs-templates/06_ops/beta-observations/protocol.template.md` · 출시 후 첫 1주 flow — `/docs-templates/03_product/05_roadmap.template.md` Week 4
 
 ---
 

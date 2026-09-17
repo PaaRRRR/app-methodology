@@ -54,7 +54,7 @@ MVP 는 수익화 OFF. DB 필드 + 코드 분기점만 미리 심어둠. 상세 
 ## 4. 도구 활용
 
 - **Backend (Supabase)** — dev 만 MCP · prod 는 CLI. 상세 + tips — `08_dev_ops.md` §4
-- **Design** — Claude 디자인 프로토타입 → Flutter 포팅. 상세 — CLAUDE.md 룰 8 · `04_design_system.md` · `/docs-templates/launch/qa-test.template.md`
+- **Design** — Claude 디자인 프로토타입 → Flutter 포팅. 상세 — CLAUDE.md 룰 8 · `04_design_system.md` · `/docs-templates/05_launch/qa-test.template.md`
 - **Observability (Sentry)** — Day 1 통합 · issue triage flow. 상세 — `08_dev_ops.md` §5 · `/stack/flutter/rule-enforcement/bloc-observer-sentry.md`
 
 ---

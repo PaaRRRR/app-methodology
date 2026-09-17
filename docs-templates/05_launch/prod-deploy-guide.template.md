@@ -1,7 +1,14 @@
-# Prod 배포 가이드
+# Prod 배포 가이드 (Template · 앱 무관 스켈레톤)
 
-> 정식 출시 시점 · SQL migration prod 적용 · 앱 배포 순서 · 심사 제출.
-> 회차별 상세는 `docs/work/{회차}/prod-deploy-guide.md` (특정 회차 산출) 로 나눔 가능.
+> **성격 —** 앱 무관 원칙 + 배포 단계 스켈레톤 (Step 0~5).
+> **실 배포 정교함 자리 —** 회차별 자기 산출물 `docs/work/{deployment-topic}/prod-deploy-guide.md` (예: `docs/work/home-ia-redesign/prod-deploy-guide.md`).
+> 회차별 상황 특수 사항 (특정 migration 순서 · 예외 처리 · seed 확인 · client 배포 순서 · Guide/Bot 데이터 등) 은 이 template 이 아니라 그 회차 문서에서 정교하게 반영.
+
+**참고 예시 —** `docs-templates/examples/05_launch/startroom-prod-deploy-guide-home-ia-redesign.md`
+- StartRoom `home-ia-redesign` 회차 실 배포 가이드 (2026-09-05).
+- 048~070 migration 순서 · 057 예외 (플레이스홀더 · Dashboard 수동) · 068/069 DROP client 배포 순서 · Guide 프로필 seed 확인 등 정교하게 반영.
+- "이 정도 정교함으로 자기 회차 문서 만들면 되는구나" 감 참고용.
+- 그대로 복사 X · 자기 앱·자기 회차 상황으로 새로 작성.
 
 ---
 
@@ -38,11 +45,14 @@ SELECT version, name FROM supabase_migrations.schema_migrations ORDER BY version
 - 예상 버전이 최신인지 확인
 - 낮으면 → 해당 번호 ~ 예상까지 먼저 적용 필요
 
-### 0-2. Seed 데이터 존재 확인 (해당 시)
+### 0-2. Seed 데이터 존재 확인 (앱에 seed 유저/데이터 있으면)
+
+Guide 봇 · 예시 데이터 · 관리자 계정 등 seed 필요한 앱만 해당.
 ```sql
 SELECT id FROM auth.users WHERE id = '{SEED_UUID}';
 ```
 - 없으면 → 해당 seed migration 먼저 적용
+- 앱에 seed 없으면 skip
 
 ### 0-3. Edge Function Secrets 확인
 Supabase Dashboard > Edge Functions > Secrets — 필요 키·값 세팅 확인.
@@ -93,6 +103,7 @@ flutter build ipa --flavor prod -t lib/entry/entry.prod.dart --release \
   --dart-define-from-file=.env.prod \
   --export-options-plist=ios/ExportOptions.plist
 ```
+- `ios/ExportOptions.plist` 최초 설정 — `docs-templates/05_launch/store-listing.template.md` Phase 3 (iOS Signing) 참조
 - Transporter 로 App Store Connect 업로드
 - 심사 제출 · 심사 노트 작성
 
@@ -121,7 +132,7 @@ flutter build appbundle --flavor prod -t lib/entry/entry.prod.dart --release \
 
 - **Sentry** — 크래시율 · 새 이슈 유형
 - **Amplitude** — DAU · 핵심 funnel 지표
-- **Beta observations** — `docs-templates/ops/beta-observations/protocol.template.md` 프로토콜 적용
+- **Beta observations** — `docs-templates/06_ops/beta-observations/protocol.template.md` 프로토콜 적용
 
 문제 발생 시 hotfix (`fix/{이슈}` 브랜치 · buildNumber 증분 · 재심사).
 

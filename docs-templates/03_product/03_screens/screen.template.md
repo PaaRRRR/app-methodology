@@ -1,12 +1,10 @@
-# 03. 화면 명세 (디자인 브리프)
+# 03. 화면 명세 · {SCREEN_NAME}
 
-> **성격 — 기획 → 디자인 넘어갈 때 디자인 도움 되는 재료.** 디자인 확정 결과 X, 디자인이 참고할 브리프.
-> 각 화면 = `docs/03_screens/{screen-name}.md` 개별 파일. 이 template 은 개별 화면 파일의 원형.
-> UI 컴포넌트·프로토타입 참조·Bloc 연결은 디자인·개발 완료 후 sync (프로토타입은 별도 `design/prototype/`, Bloc 은 `features/`).
+> **성격 — 개발 handoff 확정본 (Phase 3 산출물).** 기획·와이어프레임·디자인 phase 확정 후 채운다. 와이어프레임 X · 디자인 스케치 X · **상태 · 인터랙션 · 데이터 · BLoC 연결 · 엣지케이스** 개발 진실 자리.
+> 파일 위치 — `docs/03_screens/{screen-name}.md` (화면당 1개). 화면 목록·IA·flow 는 `docs/03_screens/README.md`.
+> 시각·동작 진실 — `design/prototype/{screen-name}.jsx` (Phase 2 Claude 디자인 산출물). md 는 md 담당 파트만 · 시각은 프로토타입 참조.
 
 ---
-
-## {SCREEN_NAME} 화면
 
 ### 1. 화면 목적 · 사용자 goal
 
@@ -84,16 +82,16 @@
 
 ---
 
-## (디자인·개발 후 sync 되는 부분 · 여기 미리 안 씀)
+## 개발 완료 후 sync (Phase 4 이후 채움)
 
-- 프로토타입 파일 — `design/prototype/{screen-name}.jsx` (Claude 디자인 산출물, 확정 후 링크)
-- UI 컴포넌트 목록 — 프로토타입 확정 후 SR 위젯 목록 sync
-- Bloc/Cubit — `features/{screen-name}/` 개발 후 sync
-- State dart 코드 — 개발 후 sync
+- **프로토타입 파일** — `design/prototype/{screen-name}.jsx` (Phase 2 산출물 · Phase 3 진입 시 이미 존재 · 링크만)
+- **UI 컴포넌트 목록** — 프로토타입 실측 기반 `{PREFIX}` 위젯 목록
+- **BLoC/Cubit** — `lib/features/{screen-name}/` 개발 후 파일 링크
+- **State dart 코드** — 개발 후 sealed class 링크
 
 ---
 
 ## 예시 (StartRoom)
 
-> 실 채운 예 — StartRoom `docs/03_screens/home.md`, `room.md`, `matched.md` 등. 각 화면별 개별 파일.
-> StartRoom 은 이미 디자인·개발 완료 상태라 프로토타입·Bloc·State 세부까지 sync 되어 있지만 template 은 "디자인 넘어가기 전" 상태 기준.
+> 실 채운 예 — StartRoom `docs/03_screens/home.md`, `room.md`, `matched.md` 등. 화면당 개별 파일.
+> StartRoom 은 디자인·개발 완료 상태라 프로토타입·Bloc·State 세부까지 sync 되어 있음. 신규 앱은 Phase 3 에서 §1~10 만 먼저 채우고 §sync 는 Phase 4 후 갱신.

@@ -243,8 +243,8 @@ dev 작업 = OAuth default. PAT 는 CI/배치 전용. OAuth 토큰은 macOS Keyc
 
 - **dev 프로젝트** — SDK 통합 · event 도착 확인 · taxonomy 검증. 실 대시보드 관측 X (사용자 데이터 없음)
 - **prod 프로젝트** — 실 사용자 event · funnel · retention 대시보드 자리
-- **super property `flavor` = dev/prod** 자동 첨부 (`/docs-templates/ops/amplitude-taxonomy/catalog.template.md` §Super Properties). prod 대시보드에서 `flavor=prod` 필터로 이중 안전
-- Day 1 raw event 박음. funnel 정의는 배포 후 대시보드. 배포 후 관측 · 트리아지 — `/docs-templates/ops/`
+- **super property `flavor` = dev/prod** 자동 첨부 (`/docs-templates/06_ops/amplitude-taxonomy/catalog.template.md` §Super Properties). prod 대시보드에서 `flavor=prod` 필터로 이중 안전
+- Day 1 raw event 박음. funnel 정의는 배포 후 대시보드. 배포 후 관측 · 트리아지 — `/docs-templates/06_ops/`
 
 ---
 
@@ -252,7 +252,7 @@ dev 작업 = OAuth default. PAT 는 CI/배치 전용. OAuth 토큰은 macOS Keyc
 
 - **베타** — TestFlight (iOS prod) + Firebase App Distribution (Android dev/prod)
 - **정식** — App Store · Play Store 심사 · Phased/Staged rollout
-- 상세 — `/docs-templates/launch/prod-deploy-guide.template.md`
+- 상세 — `/docs-templates/05_launch/prod-deploy-guide.template.md`
 
 ### 6-A. 베타 채널 원칙
 

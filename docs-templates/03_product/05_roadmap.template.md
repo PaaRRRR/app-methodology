@@ -108,10 +108,10 @@ Week 3  기능 탑재   "전기 · 수도 연결"       → 실제 동작 + 베�
 
 ## Week 4 — 베타 운영 + 정식 출시 준비
 
-- 베타 테스터 피드백 수집 (`/docs-templates/ops/beta-observations/`)
+- 베타 테스터 피드백 수집 (`/docs-templates/06_ops/beta-observations/`)
 - P0/P1 fix
-- 스토어 등록 (`/docs-templates/launch/store-listing.template.md`)
-- 심사 제출 · 롤아웃 (`/docs-templates/launch/prod-deploy-guide.template.md`)
+- 스토어 등록 (`/docs-templates/05_launch/store-listing.template.md`)
+- 심사 제출 · 롤아웃 (`/docs-templates/05_launch/prod-deploy-guide.template.md`)
 
 ---
 
@@ -124,7 +124,7 @@ Week 3  기능 탑재   "전기 · 수도 연결"       → 실제 동작 + 베�
 | Week 2 복잡 화면 | 복잡한 상태 머신 화면 (예: 세션 · 실시간 채팅 · 폼 단계 등) 은 하루 부족 | 골격/디테일 2일 분할 |
 | Week 3 Realtime 통합 (사용 시) | 화면 만들고 한참 후 통합 = 회귀 위험 | D5 검증 패턴 그대로 이어붙이기 |
 | Week 3 FCM | iOS 인증서 · APNs Key Environment 이슈로 1.5일 가능 | 충분한 시간 확보 · 급하면 일정 연장 |
-| 심사 리젝 | 앱 성격에 따라 UGC · 연령 등급 · Data Safety · 권한 · 개인정보 등 오답 | Reviewer notes 강화 (`/docs-templates/launch/store-listing.template.md`) |
+| 심사 리젝 | 앱 성격에 따라 UGC · 연령 등급 · Data Safety · 권한 · 개인정보 등 오답 | Reviewer notes 강화 (`/docs-templates/05_launch/store-listing.template.md`) |
 
 ---
 

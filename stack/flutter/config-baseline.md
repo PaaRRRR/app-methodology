@@ -219,5 +219,5 @@ flutter_launcher_icons:
 ## 관련 문서
 
 - `stack/flutter/rule-enforcement/flavor-setup.md` — `.env.dev/.env.prod` · 빌드 명령
-- `docs-templates/product/01_tech_stack.template.md` — 스택 선택 · 근거
-- `docs-templates/launch/prod-deploy-guide.template.md` — 배포 시 빌드
+- `docs-templates/03_product/01_tech_stack.template.md` — 스택 선택 · 근거
+- `docs-templates/05_launch/prod-deploy-guide.template.md` — 배포 시 빌드

@@ -126,7 +126,7 @@ SaaS 구독 앱 감 잡기용 baseline. 실 전환율은 페이월 UX · 가격 
 
 ## 6. 이벤트 트래킹 (V2/V3 도입 시)
 
-수익화 이벤트는 V2/V3 도입 시점에 정의 · Amplitude taxonomy 로 흡수 (`/docs-templates/ops/amplitude-taxonomy/catalog.template.md` §Cleanup 원칙).
+수익화 이벤트는 V2/V3 도입 시점에 정의 · Amplitude taxonomy 로 흡수 (`/docs-templates/06_ops/amplitude-taxonomy/catalog.template.md` §Cleanup 원칙).
 
 **Baseline 이벤트 —**
 
