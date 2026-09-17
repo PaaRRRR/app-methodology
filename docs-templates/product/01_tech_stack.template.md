@@ -51,13 +51,50 @@ MVP 는 수익화 OFF. DB 필드 + 코드 분기점만 미리 심어둠. 상세 
 
 ---
 
-## 4. Baseline `pubspec.yaml`
+## 4. 도구 활용
 
-상세 코드·버전 — `stack/flutter/config-baseline.md`. 새 앱 착수 시 그대로 복붙.
+- **Backend (Supabase)** — dev 만 MCP · prod 는 CLI. 상세 + tips — `08_dev_ops.md` §4
+- **Design** — Claude 디자인 프로토타입 → Flutter 포팅. 상세 — CLAUDE.md 룰 8 · `04_design_system.md` · `/docs-templates/launch/qa-test.template.md`
+- **Observability (Sentry)** — Day 1 통합 · issue triage flow. 상세 — `08_dev_ops.md` §5 · `/stack/flutter/rule-enforcement/bloc-observer-sentry.md`
 
 ---
 
-## 5. .env 구조
+## 5. 외부 서비스 계정 체크리스트
+
+개발 시작 전 준비할 계정·프로젝트 (앱 무관 baseline · 도메인 특화만 조정).
+
+- [ ] Backend (Supabase 등) — dev / prod 프로젝트 각 1개
+- [ ] Firebase — dev / prod 프로젝트 (FCM + App Distribution)
+- [ ] Analytics (Amplitude 등) — dev / prod 앱 키
+- [ ] Crash (Sentry) — 프로젝트 1개 (environment 로 dev/prod 구분)
+- [ ] Apple Developer — 계정 ($99/년 · 푸시 인증서 + 배포)
+- [ ] Google Play Console — 계정 ($25 1회)
+- [ ] **도메인** — {DOMAIN} (예: startroom.live) · DNS (Cloudflare 권장) + well-known 호스팅. Universal Link — iOS `applinks:` · Android `assetlinks.json` 두 방향 · `app_links` 패키지 처리
+- [ ] 랜딩 페이지 호스팅 — Vercel 무료 등
+
+---
+
+## 6. 무료 티어 한도 (참고)
+
+| 서비스 | 무료 한도 | 초과 시 |
+|---|---|---|
+| Supabase | 500MB DB · 1GB 파일 · 2GB egress | Pro $25/월 |
+| Firebase FCM | 무제한 | — |
+| Firebase App Distribution | 무료 | — |
+| Amplitude | 월 10M 이벤트 | 유료 플랜 |
+| Sentry | 월 5k errors | 유료 플랜 |
+
+> Beta (수백 명) 규모에서는 모두 무료 티어로 충분.
+
+---
+
+## 7. Baseline `pubspec.yaml`
+
+상세 코드·버전 — `/stack/flutter/config-baseline.md`. 새 앱 착수 시 그대로 복붙.
+
+---
+
+## 8. .env 구조
 
 `.env.dev` / `.env.prod` / `.env.example` — flavor 별 분리. 상세 규칙 — `08_dev_ops.md` §1.
 
@@ -73,26 +110,17 @@ FIREBASE_...={KEY}
 
 ---
 
-## 6. Domain (Universal Link 용)
-
-- 앱 도메인 — {DOMAIN} (예: startroom.live)
-- iOS `applinks:` · Android `assetlinks.json` 두 방향 · `app_links` 패키지가 처리
-
----
-
-## 7. MCP 활용
-
-- **Backend MCP (Supabase)** — dev 만 MCP · prod 는 CLI. 상세 — `mcp/supabase-dev-vs-prod.md`
-- **Claude 디자인** — 프로토타입 산출물 read. 상세 — `mcp/claude-design.md`
-- **Sentry MCP** — issue triage flow. 상세 — `mcp/sentry.md`
-
----
-
-## 8. 변경 이력 (원안 → 현재)
+## 9. 변경 이력
 
 원안에서 바뀐 것 있으면 `07_decisions_log.md` 에 D-XX 로 기록.
 
-**StartRoom 사례.**
+---
+
+## 10. 예시 (StartRoom)
+
+StartRoom 은 §1 baseline + 도메인 특화 (qr_flutter · mobile_scanner · app_links · audioplayers · image_gallery_saver · share_plus · sliver_tools) + Pretendard 폰트.
+
+**주요 변경 이력 —**
 - Riverpod → BLoC (D-01) · 익숙한 패턴 · 학습 곡선
 - Magic Link → 익명 인증 (D-02) · 로그인 화면 없이 시스템 인증
 - PostHog → Amplitude (D-03) · 한국 자료 · Funnel 표준
@@ -101,6 +129,8 @@ FIREBASE_...={KEY}
 
 ---
 
-## 9. 예시 (StartRoom)
+## 참조 경로 표기 원칙 (문서 전체 공통)
 
-> StartRoom 은 위 baseline + 도메인 특화 (qr_flutter · mobile_scanner · app_links · audioplayers · image_gallery_saver · share_plus · sliver_tools) + Pretendard 폰트.
+- **product/ 안 서로 참조** — 파일명만 (예: `08_dev_ops.md`)
+- **product/ 밖 참조** — repo 루트 기준 (예: `/stack/flutter/config-baseline.md`)
+- CLAUDE.md 룰은 "CLAUDE.md 룰 {번호}" 로

@@ -28,7 +28,6 @@ app-methodology/
 │   ├── launch/                                  # (배포 준비)
 │   │   ├── store-listing.template.md
 │   │   ├── qa-test.template.md
-│   │   ├── release-checklist.template.md
 │   │   └── prod-deploy-guide.template.md
 │   ├── ops/                                     # ★ (배포 후 · 강조)
 │   │   ├── amplitude-taxonomy/
@@ -79,7 +78,6 @@ app-methodology/
 | `docs/07_decisions_log.md` | `docs-templates/product/07_decisions_log.template.md` | 의사결정 로그 포맷 (D-XX · 배경 · 결정 · 결과) + StartRoom 예시 2~3개 |
 | `docs/08_dev_ops.md` | `docs-templates/product/08_dev_ops.template.md` | flavor 분리·GitHub Flow·.env 주입 원칙 |
 | `docs/store-listing.md` | `docs-templates/launch/store-listing.template.md` | 앱스토어/플레이스토어 메타 필드 목록 (앱명·부제·설명·키워드·스크린샷 spec) |
-| `docs/release-checklist.md` | `docs-templates/launch/release-checklist.template.md` | 출시 차단·권장·사용자 결정 3분류 골격 |
 | `docs/work/home-ia-redesign/prod-deploy-guide.md` | `docs-templates/launch/prod-deploy-guide.template.md` | prod 배포 순서 (SQL 적용·앱 빌드·심사 제출·롤아웃) |
 | `_qa/visual_qa.md` + `_qa/README.md` | `docs-templates/launch/qa-test.template.md` | 프로토타입 vs Flutter 실측 비교 QA 프로세스 |
 | `docs/work/amplitude-taxonomy/catalog.md` | `docs-templates/ops/amplitude-taxonomy/catalog.template.md` | 이벤트 네이밍·property 표준·funnel 분리 원칙 |

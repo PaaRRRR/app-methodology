@@ -7,9 +7,11 @@
 
 ## 이 저장소 사용법 (다음 앱 시작 시)
 
+> ⚠️ **Template 은 참조 자료 · 그대로 복사해서 쓰지 X.** 각 template 의 **공통 원칙** (앱 무관 · WCAG · 아키텍처 등) 은 유지하되 **placeholder · 예시 값 · StartRoom 특화 자리** 는 반드시 새 앱 정체성·도메인·화면에 맞게 재작성. 그대로 두면 새 앱이 StartRoom clone 이 됨.
+
 1. **`milestone-order.md` 먼저 읽기** — 시간순 이정표 (Docs → Design → Code → 배포 → 운영)
 2. **`CLAUDE.md.template` 복사** — 새 앱 저장소 root 에 `CLAUDE.md` 로. placeholder 치환 (`{APP_NAME}`, `{ONE_LINER}` 등)
-3. **`docs-templates/product/00~08.template.md` 복사** — 새 앱 저장소 `docs/` 에. Docs-first 로 앱 코드 없이 문서부터 채움
+3. **`docs-templates/product/00~08.template.md` 복사 → 재작성** — 새 앱 저장소 `docs/` 에. Docs-first 로 앱 코드 없이 문서부터 채움
 4. **Phase 별 이동** — 각 phase 완료 시 `milestone-order.md` 의 다음 phase 로. 배포 후엔 `docs-templates/ops/` 강조
 5. **매 회차 진입 시 `workflow/session-workflow.md` 참조** — plan → 진입 commit → 수행 → analyze+test → 사용자 OK → 의미 단위 commit → 머지
 
@@ -26,7 +28,6 @@
 │   ├── ops/                        # (Phase 4) 배포 후 — amplitude · beta-observations
 │   └── legal/                      # 개인정보·약관
 ├── workflow/                       # 회차 workflow · git flow · 명명 규칙
-├── mcp/                            # MCP 활용 (claude-design · supabase-dev-vs-prod · sentry)
 └── stack/flutter/                  # Flutter 스택 특화
     ├── rule-enforcement/           # 절대 규칙 실현 코드 예시 (룰별)
     └── config-baseline.md          # pubspec · analysis_options · launcher_icons

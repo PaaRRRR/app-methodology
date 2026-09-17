@@ -12,9 +12,8 @@
 | | dev | prod |
 |---|---|---|
 | 적용 방식 | MCP `apply_migration` | Supabase CLI `db push` |
-| schema_migrations 버전 | 타임스탬프 | 파일명 숫자 prefix |
 
-**Prod = `supabase db push` 를 메인 배포 수단으로 사용.** 파일명 숫자 prefix 가 version 이 되므로 미적용 번호부터 순차 적용.
+**파일명 규칙은 dev/prod 동일** — `{NNN}_{snake_case_설명}.sql` (숫자 3자리 zero-pad). MCP `apply_migration` 은 파일명 그대로 등록. Prod `db push` 는 파일명 숫자 prefix 를 version 으로 사용 · 미적용 번호부터 순차 적용.
 
 ### 예외 — 플레이스홀더 있는 migration
 

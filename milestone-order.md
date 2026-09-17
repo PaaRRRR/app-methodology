@@ -2,6 +2,8 @@
 
 > 다음 앱을 만들 때 어떤 순서로 진행할지 이정표.
 > StartRoom 실 작업 흐름 기반 — 앱 코드 없이 docs 8개로 시작 → Claude 디자인 MCP → Claude Code 로드맵 → 배포 → 운영.
+>
+> ⚠️ **각 phase 의 참조 template 은 그대로 쓰지 X.** 공통 원칙 (앱 무관) 은 유지 · placeholder · 예시 값 · StartRoom 특화 자리는 새 앱 정체성·도메인·화면에 맞게 **재작성** 필수. 그대로 두면 새 앱이 StartRoom clone 이 됨.
 
 ---
 
@@ -39,7 +41,7 @@
 3. 프로토타입 iteration — 시각·상호작용·애니메이션 확정
 4. `docs/04_design_system.md` 확정 — 프로토타입 실측 팔레트·토큰 값
 
-**참조 template** — `mcp/claude-design.md`
+**참조 template** — CLAUDE.md 룰 8 · `docs-templates/product/04_design_system.template.md` · `docs-templates/launch/qa-test.template.md`
 
 **완료 기준** — 전 화면 프로토타입 완성 · 디자인 시스템 확정 · 다음 단계 (코드) 착수 가능
 
@@ -53,7 +55,7 @@
 **Week 2 · 뼈대·화면 완성** — mock 데이터로 모든 UI 구현
 **Week 3 · 기능 탑재 + 베타** — Realtime · 매칭 · 푸시 (FCM) · 딥링크 (app_links) · 베타 배포 (TestFlight · Android Firebase App Distribution)
 
-**참조 template** — `docs-templates/product/05_roadmap.template.md` · `workflow/session-workflow.md` · `stack/flutter/rule-enforcement/` · `stack/flutter/config-baseline.md` · `mcp/supabase-dev-vs-prod.md`
+**참조 template** — `docs-templates/product/05_roadmap.template.md` · `workflow/session-workflow.md` · `stack/flutter/rule-enforcement/` · `stack/flutter/config-baseline.md` · `docs-templates/product/08_dev_ops.template.md` §4 (Backend MCP + tips)
 
 **완료 기준** — 앱 빌드 성공 · 핵심 flow 동작 · 베타 배포 가능 상태
 
@@ -66,10 +68,9 @@
 **순서**
 
 1. **QA** — 프로토타입 vs Flutter 실측 비교 (`docs-templates/launch/qa-test.template.md`)
-2. **release-checklist 실행** — 출시 차단·권장·사용자 결정 3분류로 잔여 처리 (`docs-templates/launch/release-checklist.template.md`)
-3. **store-listing 작성** — 앱스토어/플레이스토어 메타 (이름·부제·설명·키워드·스크린샷) (`docs-templates/launch/store-listing.template.md`)
-4. **legal** — 개인정보처리방침 · 이용약관 (`docs-templates/legal/`)
-5. **prod-deploy** — SQL prod migration (CLI) · 앱 빌드 · 심사 제출 · 롤아웃 (`docs-templates/launch/prod-deploy-guide.template.md`)
+2. **store-listing 작성** — 앱스토어/플레이스토어 메타 (이름·부제·설명·키워드·스크린샷) (`docs-templates/launch/store-listing.template.md`)
+3. **legal** — 개인정보처리방침 · 이용약관 (`docs-templates/legal/`)
+4. **prod-deploy** — SQL prod migration (CLI) · 앱 빌드 · 심사 제출 · 롤아웃 (`docs-templates/launch/prod-deploy-guide.template.md`)
 
 **완료 기준** — App Store · Play Store 심사 통과 · 출시 완료
 
@@ -87,7 +88,7 @@
    - 주기적 관측 · 트리아지 flow
 3. **Sentry alerts · Firebase App Distribution · 사용자 피드백 분류** — 각각 setup
 
-**참조 template** — `docs-templates/ops/*` · `mcp/sentry.md`
+**참조 template** — `docs-templates/ops/*` · `docs-templates/product/08_dev_ops.template.md` §5 (Sentry + triage flow)
 
 **완료 기준** — 지속적 관측·개선 loop 정착 (일회성 아님)
 
