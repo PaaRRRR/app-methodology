@@ -42,7 +42,8 @@
 | 제품 정의 · 가설 · MVP 범위 | `docs/00_overview.md` |
 | 기술 스택 · pubspec · .env | `docs/01_tech_stack.md` |
 | 폴더 구조 · DB 스키마 · BLoC 패턴 | `docs/02_architecture.md` |
-| 화면 명세 (디자인 브리프) | `docs/03_screens/{화면}.md` |
+| 화면 아키텍처 · IA · flow | `docs/03_screens/README.md` |
+| 화면별 개발 명세 | `docs/03_screens/{화면}.md` |
 | 컬러 · 폰트 · 컴포넌트 | `docs/04_design_system.md` |
 | 화면 시각·동작 (디자인 진실) | `design/prototype/{화면}.jsx` (Claude 디자인 산출물, MCP read) |
 | 일정 · 마일스톤 | `docs/05_roadmap.md` |
@@ -71,7 +72,7 @@
 5. **Realtime 구독은 화면 진입 시 시작, dispose 에서 반드시 해제.** 누수 주의. (안전성)
 6. **에러는 삼키지 않는다.** try-catch 에서 Sentry 로 보고 + 사용자에게 적절한 에러 상태 표시. (안전성)
 7. **dev/prod 환경을 섞지 않는다.** 항상 어느 flavor 인지 의식한다. (안전성)
-8. **디자인은 프로토타입이 진실.** 화면을 구현할 때 `design/prototype/{화면}.jsx` (Claude 디자인 산출물, Claude Code 에서 MCP 로 read) 를 시각·동작의 단일 진실로 삼는다. 색·간격·폰트·애니메이션·상태 전환은 추측하지 말고 그 코드의 실측값을 읽어 Flutter 로 포팅한다 (새로 디자인하지 않는다). `docs/03_screens/{화면}.md` 는 디자인 브리프 · 구조·상태·엣지케이스만 담당. 둘이 충돌하면 시각은 프로토타입, 동작 흐름·연결은 md. (디자인 진실)
+8. **디자인은 프로토타입이 진실.** 화면을 구현할 때 `design/prototype/{화면}.jsx` (Claude 디자인 MCP iteration → Phase 2 확정 시 local export 된 git-tracked 스냅샷) 를 시각·동작의 단일 진실로 삼는다. 색·간격·폰트·애니메이션·상태 전환은 추측하지 말고 그 코드의 실측값을 읽어 Flutter 로 포팅한다 (새로 디자인하지 않는다). 디자인 변경 필요 시 → MCP 재수정 → local 재export → 새 commit (사일런트 드리프트 방지). `docs/03_screens/{화면}.md` 는 개발 handoff 명세 · 상태·인터랙션·데이터·BLoC 연결·엣지케이스 담당. 둘이 충돌하면 시각은 프로토타입, 동작 흐름·연결은 md. (디자인 진실)
 9. **{APP_SPECIFIC_RULE}** — 앱별 도메인 룰. 이 자리에 앱 정체성 관련 룰을 박음.
     <!--
     예시 (StartRoom): "혼자 시작은 없다" — 앱 내부의 옵션·상태·라벨·DB 값으로서의 "혼자/없이/solo" 는 금지 (매칭이 안 되면 Guide 가 파트너로 배정). 단, 사용자의 출발 문제를 묘사하는 카피 ("혼자가 아니라, 동료와 함께") 는 핵심 메시지이므로 유지.
