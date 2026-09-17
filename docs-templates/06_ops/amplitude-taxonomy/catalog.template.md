@@ -94,4 +94,6 @@ dev / debug 화면 — taxonomy 대상 X (flavor=prod 만 트래킹).
 
 ## 예시 (StartRoom)
 
-> 실 채운 예 — StartRoom `docs/work/amplitude-taxonomy/catalog.md`. 16개 화면 · 143개 event · cleanup 9원칙 · close→재진입 재 fire 패턴 상세.
+> 실 채운 예 — `docs-templates/examples/06_ops/startroom-catalog.md` (저장소 안 첨부 · fork 시 참고 가능).
+> 16개 화면 · 143개 event · cleanup 9원칙 · close→재진입 재 fire 패턴 · super property (`app_version` · `build_number` · `flavor` · `theme_mode`) 실 예시.
+> 자기 앱 화면·event 로 새로 작성 · 이 예시는 서술 깊이·구조 감 참고용.

@@ -1,6 +1,8 @@
 # 이용약관 (Terms of Service)
 
 > **법률 검토 필요.** 본 template 은 UGC + 익명 매칭 성격 서비스에 필요한 사용자 책임 / 운영자 면책 / 분쟁 처리 조항 등 일반 SaaS 약관 + Apple/Google 심사 요구 cover 한 starting point. 실 배포 전 변호사 검토 권장.
+>
+> **앱 성격별 조항 취사 —** UGC 없는 앱은 §7 · 사용자 상호작용/매칭 없는 앱은 §8 skip 가능. 유료 도입 없으면 §10 skip. 앱 특화 조항 추가 필요 시 §{추가}.
 
 발효일 — YYYY-MM-DD
 최종 수정일 — YYYY-MM-DD
